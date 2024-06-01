@@ -100,13 +100,18 @@ if c[0]:
     Amazon = AmazonSearch(URL)
     if Amazon.checkProductInLogging():
         data = getDataFromLogging(Amazon.getProductName())
+        # print(data)
+
     else:
         Amazon.main()
         Amazon.logData()
         data = Amazon.retData()
-    clearTerminal()
+    # clearTerminal()
     print(data)
     new = credible(data)
     new.getCredScore(len(data))
     print(new.returnCred())
+else:
+    print("failure useless")
 #TODO: create explanation for credibility scores 
+

@@ -105,11 +105,13 @@ def getDataFromLogging(name:str):                   #FINALLY WORKNIG AKL FJDSOIF
         lines = f.readlines()
         for line in lines:
             data = ast.literal_eval(line)
-            prod:str = data[1]["review_product"]
+            prod:str = data[0]["review_product"]
             if prod == name:
                 return data
             else:
-                return "Unknown product" + prod
+                continue
+        
+    return "Unknown product " + name
     
 
 #test body
@@ -151,4 +153,4 @@ def getCurLine() -> int:
 #             lines[line-1] = curLine + "\n"
 #             for line in lines:
 #                 f.write(line)
-                
+            
