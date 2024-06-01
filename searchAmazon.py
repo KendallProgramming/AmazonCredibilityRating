@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 from urllib.parse import urlparse
 from datetime import datetime
 import re
-from BaseFunctions import getActualDate, checkProductName, stripUrl, checkUrl, clearTerminal, getCurLine, fixLoggingError
+from BaseFunctions import getActualDate, checkProductName, stripUrl, checkUrl, clearTerminal, getCurLine
 #credit: https://stackoverflow.com/questions/77549293/python-beatifulsoup-only-scrapes-the-1st-page-of-amazon-reviews-someone-knows-h
 
  #temp
@@ -383,14 +383,13 @@ class AmazonSearch:
         for i in range(len(self.bodies)):
             self.retList[i] = formatReview(self.dates[i], self.titles[i], self.productName,
                                            self.lenBodies[i], self.ratings[i], self.bodies[i], self.amntReviews)
-        # self.retList.append({"price": self.price})
-        # self.retList.append({"amount_reviews":self.amntReviews})
         
         return self.retList    
     
     def getProductName(self):
         return self.productName        
         
+
     def logData(self):
         if self.mainRan:
             with open("Logging.txt", "r") as f1:
@@ -402,28 +401,25 @@ class AmazonSearch:
                     
             with open("Logging.txt" ,"a+") as f:
                 for i in range(len(self.bodies)):
-                    if i == 0: f.write(f"{self.retList}, ")
+                    # print(f"currently logging {self.retlist[i]}")
+                    if i == 0: f.write(f"[{self.retList[i]}, ")
                     elif not len(self.bodies)-1 == i: f.write(f"{self.retList[i]}, ") 
                     else: f.write(f"{self.retList[i]}]")
-                fixLoggingError(getCurLine())
+    
+        
     def checkProductInLogging(self):
+        #TODO: make try except here to check for lines in logging.txt
         with open("Logging.txt", "r") as f:
             lines = f.readlines()
+            
             for line in lines:
-                data = ast.literal_eval(line)
+                data:list = ast.literal_eval(line)
                 prod:str = data[1]["review_product"]
                 if prod == self.productName:return True
                 else:return False
 
-
-                
-                
-            
-        
-    
-
-tempUrl = "https://www.amazon.com/Kerastase-Absolu-Overnight-Recovery-Cicanuit/dp/B08L5Q6K5T/?_encoding=UTF8&pd_rd_w=mNrTP&content-id=amzn1.sym.a725c7b8-b047-4210-9584-5391d2d91b93%3Aamzn1.symc.d10b1e54-47e4-4b2a-b42d-92fe6ebbe579&pf_rd_p=a725c7b8-b047-4210-9584-5391d2d91b93&pf_rd_r=CJKDQJPW6H3CWVHY5DE0&pd_rd_wg=az9cm&pd_rd_r=89c5e0ea-5e70-4323-a924-3f54ded0827a&ref_=pd_hp_d_atf_ci_mcx_mr_hp_atf_m"
-temp = "https://www.amazon.com/Kerastase-Absolu-Overnight-Recovery-Cicanuit/product-reviews/B08L5Q6K5T/?_encoding=UTF8&pd_rd_w=mNrTP&content-id=amzn1.sym.a725c7b8-b047-4210-9584-5391d2d91b93%3Aamzn1.symc.d10b1e54-47e4-4b2a-b42d-92fe6ebbe579&pf_rd_p=a725c7b8-b047-4210-9584-5391d2d91b93&pf_rd_r=CJKDQJPW6H3CWVHY5DE0&pd_rd_wg=az9cm&pd_rd_r=89c5e0ea-5e70-4323-a924-3f54ded0827a&ref_=pd_hp_d_atf_ci_mcx_mr_hp_atf_m"
+# tempUrl = "https://www.amazon.com/Kerastase-Absolu-Overnight-Recovery-Cicanuit/dp/B08L5Q6K5T/?_encoding=UTF8&pd_rd_w=mNrTP&content-id=amzn1.sym.a725c7b8-b047-4210-9584-5391d2d91b93%3Aamzn1.symc.d10b1e54-47e4-4b2a-b42d-92fe6ebbe579&pf_rd_p=a725c7b8-b047-4210-9584-5391d2d91b93&pf_rd_r=CJKDQJPW6H3CWVHY5DE0&pd_rd_wg=az9cm&pd_rd_r=89c5e0ea-5e70-4323-a924-3f54ded0827a&ref_=pd_hp_d_atf_ci_mcx_mr_hp_atf_m"
+# temp = "https://www.amazon.com/Kerastase-Absolu-Overnight-Recovery-Cicanuit/product-reviews/B08L5Q6K5T/?_encoding=UTF8&pd_rd_w=mNrTP&content-id=amzn1.sym.a725c7b8-b047-4210-9584-5391d2d91b93%3Aamzn1.symc.d10b1e54-47e4-4b2a-b42d-92fe6ebbe579&pf_rd_p=a725c7b8-b047-4210-9584-5391d2d91b93&pf_rd_r=CJKDQJPW6H3CWVHY5DE0&pd_rd_wg=az9cm&pd_rd_r=89c5e0ea-5e70-4323-a924-3f54ded0827a&ref_=pd_hp_d_atf_ci_mcx_mr_hp_atf_m"
 URL = input("Paste web name: \n")
 # URL = "https://www.amazon.com/DrunkDeer-A75-Mechanical-Keyboard-Keyboards/dp/B0C5HC7145/ref=sr_1_1?crid=1LNUOITF1557W&dib=eyJ2IjoiMSJ9.b5y6mDzg33F7yQIoCHlML3ateh3X70vpKzsBR7fk79jvnTjkgGsggnApEEhy1-OKSntWqb5yMXDMVXO2DL5szXNtzR2EcVP2iLm3DSI4172BnlmQIbzZd08FAC_25HTic64W6wYnYmifSillfoAmbbfObJiXBRJulZbrsBvyVW40HHaYG6-cFRP88-BGxeQaniX64vqzyICa0E5ptgc5HxOm4L6sXpM-dPKttP86wVE.zY9mcX-tewp4pVpURy49MVpGXmRFqlzPnwaZLrS-HNY&dib_tag=se&keywords=wooting&qid=1716989686&sprefix=wooting%2Caps%2C107&sr=8-1&th=1"
 # print((temp == tempUrl))
@@ -431,11 +427,12 @@ URL = input("Paste web name: \n")
 if not checkUrl:
     print("Invalid URL")
 else:
-    clearTerminal("mac")
+    clearTerminal()
     Amazon = AmazonSearch(URL)
     Amazon.main()
     data = Amazon.retData()
     Amazon.logData()
+    # Amazon.fixLogging()
     # log = Amazon.checkProductInLogging()
     # print(log)
 

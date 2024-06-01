@@ -1,0 +1,10 @@
+TODO: create logging to check if item that person is already looking for is saved :check:
+
+TODO: debug above  partly done
+
+
+TODO: finish credibility rating system   :check:
+
+TODO: make tons of checks for data types and links, except Exception as e: print(repr(e))
+
+TODO: add specifiers for easier accessing

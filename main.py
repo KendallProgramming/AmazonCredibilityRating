@@ -8,7 +8,7 @@ import re
 from datetime import date
 
 from searchAmazon import AmazonSearch
-from BaseFunctions import getActualDate, checkProductName, stripUrl, checkUrl, getReview
+from BaseFunctions import checkUrl, getReview,getDataFromLogging, clearTerminal
 
 class credible:
     
@@ -79,9 +79,13 @@ class credible:
             self.reviewCheck = "Too few reviews"
         
         if self.reviewCheck != "Too few reviews":
-            return f"\nProduct {self.productName}'s credibility score is {str(round(self.credibilityScore, 2))} out of 10"
+            self.credibilityScore = str(round(self.credibilityScore, 2))
+            
         else:
             return "Too few reviews to calculate"
+        
+    def returnCred(self) -> str:
+        return f"\nProduct {self.productName}'s credibility score is {self.credibilityScore} out of 10"
         
     def checkUnit(self):
         print(self.data)
@@ -94,12 +98,15 @@ URL = input("Please paste your URL to your product (Amazon only as of now) below
 c = checkUrl(URL)
 if c[0]:
     Amazon = AmazonSearch(URL)
-    check = Amazon.checkProductInLogging()
-    # if check:
-    #     # getDataFromLogging(Amazon.getProductName())
-    Amazon.main()
-    data = Amazon.retData()
+    if Amazon.checkProductInLogging():
+        data = getDataFromLogging(Amazon.getProductName())
+    else:
+        Amazon.main()
+        Amazon.logData()
+        data = Amazon.retData()
+    clearTerminal()
     print(data)
     new = credible(data)
-    score = new.getCredScore(len(data))
-    print(score)
+    new.getCredScore(len(data))
+    print(new.returnCred())
+#TODO: create explanation for credibility scores 

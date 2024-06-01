@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup
 from urllib.parse import urlparse
-import json, ast, os
+import json, ast, os, sys
 
 
 def stripUrl(url:str) -> str:
@@ -114,10 +114,15 @@ def getDataFromLogging(name:str):                   #FINALLY WORKNIG AKL FJDSOIF
 
 #test body
 #mac uses "os.system("clear")" to clear the screen, windows uses "os.system("cls")" to clear the screen. get if user is on mac or windows and decide which to use
-def clearTerminal(mow):
-    """""
-    mow:str -> mac or windows
-    """
+def clearTerminal():
+    mow = str(sys.platform)
+    print(mow)
+    if "win" in mow:
+        mow = "windows"
+    else:
+        #TODO: make a check for mac as well
+        mow = "mac"
+
     if mow == "mac":
         os.system("clear")
     elif  mow  == "windows":
@@ -125,14 +130,25 @@ def clearTerminal(mow):
     else:
         return None
 
-def getCurLine():
+def getCurLine() -> int:
     with open("Logging.txt", "r") as f:
         return len(f.readlines())
 
-def fixLoggingError(line):
-    with open("Logging.txt", "r") as f:
-        lines = f.readlines()
-        curLine:str = lines[line-1]
-        curLine = curLine.replace("]", "", 1)
-    # with open("Logging.txt", "a+") as f:
-    #TODO: replace the line given with the edited line, curLine. 
+# def fixLoggingError(line:int) -> None:
+#     check = False
+#     with open("Logging.txt", "r") as f:
+#         if len(f.readlines()) != 0:
+#             check = True
+#     if check:
+#         with open("Logging.txt", "r") as f:
+#             lines = f.readlines()
+#             curLine:str = lines[line-1]
+#             curLine = curLine.replace("]", "", 1)
+            
+#         with open("Logging.txt", "r+") as f:
+#             lines = f.readlines()
+#             print(len(lines))
+#             lines[line-1] = curLine + "\n"
+#             for line in lines:
+#                 f.write(line)
+                
