@@ -380,7 +380,7 @@ class AmazonSearch:
             list: formatted data, price as a string to be used to check other websites for similar prices. 
         """
         self.retList = ["" for x in range(len(self.bodies))]
-        for i in range(len(self.bodies)):
+        for i,thing in enumerate(self.bodies):
             self.retList[i] = formatReview(self.dates[i], self.titles[i], self.productName,
                                            self.lenBodies[i], self.ratings[i], self.bodies[i], self.amntReviews)
         
@@ -400,7 +400,7 @@ class AmazonSearch:
                             f2.write("\n")
                     
             with open("Logging.txt" ,"a+") as f:
-                for i in range(len(self.bodies)):
+                for i,thing in enumerate(self.bodies):
                     # print(f"currently logging {self.retlist[i]}")
                     if i == 0: f.write(f"[{self.retList[i]}, ")
                     elif not len(self.bodies)-1 == i: f.write(f"{self.retList[i]}, ") 
@@ -408,29 +408,34 @@ class AmazonSearch:
     
         
     def checkProductInLogging(self):
-        #TODO: make try except here to check for lines in logging.txt
-        with open("Logging.txt", "r") as f:
-            lines = f.readlines()
-            
-            for line in lines:
-                data:list = ast.literal_eval(line)
-                prod:str = data[1]["review_product"]
-                if prod == self.productName:return True
-                else:continue
-            return False
+        with open("Logging.txt", "r") as f1:
+            lines = f1.readlines()
+        if lines == []:return False
+        else:
+            with open("Logging.txt", "r") as f:
+                lines = f.readlines()
+                
+                for line in lines:
+                    data:list = ast.literal_eval(line)
+                    prod:str = data[1]["review_product"]
+                    if prod == self.productName:return True
+                    else:continue
+                return False
 
 # tempUrl = "https://www.amazon.com/Kerastase-Absolu-Overnight-Recovery-Cicanuit/dp/B08L5Q6K5T/?_encoding=UTF8&pd_rd_w=mNrTP&content-id=amzn1.sym.a725c7b8-b047-4210-9584-5391d2d91b93%3Aamzn1.symc.d10b1e54-47e4-4b2a-b42d-92fe6ebbe579&pf_rd_p=a725c7b8-b047-4210-9584-5391d2d91b93&pf_rd_r=CJKDQJPW6H3CWVHY5DE0&pd_rd_wg=az9cm&pd_rd_r=89c5e0ea-5e70-4323-a924-3f54ded0827a&ref_=pd_hp_d_atf_ci_mcx_mr_hp_atf_m"
 # temp = "https://www.amazon.com/Kerastase-Absolu-Overnight-Recovery-Cicanuit/product-reviews/B08L5Q6K5T/?_encoding=UTF8&pd_rd_w=mNrTP&content-id=amzn1.sym.a725c7b8-b047-4210-9584-5391d2d91b93%3Aamzn1.symc.d10b1e54-47e4-4b2a-b42d-92fe6ebbe579&pf_rd_p=a725c7b8-b047-4210-9584-5391d2d91b93&pf_rd_r=CJKDQJPW6H3CWVHY5DE0&pd_rd_wg=az9cm&pd_rd_r=89c5e0ea-5e70-4323-a924-3f54ded0827a&ref_=pd_hp_d_atf_ci_mcx_mr_hp_atf_m"
-URL = input("Paste web name: \n")
+# URL = input("Paste web name: \n")
 
-if not checkUrl:
-    print("Invalid URL")
-else:
-    # clearTerminal()
-    Amazon = AmazonSearch(URL)
-    Amazon.main()
-    data = Amazon.retData()
-    Amazon.logData()
+# if not checkUrl:
+#     print("Invalid URL")
+# else:
+#     # clearTerminal()
+#     Amazon = AmazonSearch(URL)
+#     Amazon.main()
+#     data = Amazon.retData()
+#     if not Amazon.checkProductInLogging():
+        
+#         Amazon.logData()
 
 
 
