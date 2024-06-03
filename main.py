@@ -1,14 +1,6 @@
-import urllib3, requests, html, os
-import tkinter as tk
-from bs4 import BeautifulSoup
-from urllib.parse import urlparse
-from datetime import datetime
-from ast import literal_eval
-import re
 from datetime import date
-
 from searchAmazon import AmazonSearch
-from BaseFunctions import checkUrl, getReview,getDataFromLogging, clearTerminal
+from BaseFunctions import checkUrl, getReview, getDataFromLogging, clearTerminal
 
 class credible:
     
@@ -104,7 +96,8 @@ if c[0]:
         Amazon.main()
         Amazon.logData()
         data = Amazon.retData()
-    # clearTerminal()
+    clearTerminal()
+
     new = credible(data)
     new.getCredScore(len(data))
     print(new.returnCred())
