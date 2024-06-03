@@ -92,8 +92,6 @@ class credible:
         
 
         
-        
-        
 URL = input("Please paste your URL to your product (Amazon only as of now) below.\n")
 c = checkUrl(URL)
 if c[0]:
@@ -107,7 +105,6 @@ if c[0]:
         Amazon.logData()
         data = Amazon.retData()
     # clearTerminal()
-    print(data)
     new = credible(data)
     new.getCredScore(len(data))
     print(new.returnCred())

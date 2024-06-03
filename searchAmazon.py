@@ -3,12 +3,11 @@ from bs4 import BeautifulSoup
 from urllib.parse import urlparse
 from datetime import datetime
 import re
-from BaseFunctions import getActualDate, checkProductName, stripUrl, checkUrl, clearTerminal, getCurLine
+from BaseFunctions import getActualDate, checkProductName, stripUrl, checkUrl, clearTerminal, getCurLine, fixEncoding
 #credit: https://stackoverflow.com/questions/77549293/python-beatifulsoup-only-scrapes-the-1st-page-of-amazon-reviews-someone-knows-h
 
- #temp
-alreadyChecked = False
 
+#This class doesn't work, kept in here for future expansion
 class AmazonSearchFail:
     def __init__(self, url):
         self.url = url
@@ -392,35 +391,54 @@ class AmazonSearch:
 
     def logData(self):
         if self.mainRan:
-            with open("Logging.txt", "r") as f1:
-                lines = f1.readlines()
-                for line in lines:
-                    if line[-1] != "\n":
-                        with open("Logging.txt", "a+") as f2:
-                            f2.write("\n")
-                    
-            with open("Logging.txt" ,"a+") as f:
-                for i,thing in enumerate(self.bodies):
-                    # print(f"currently logging {self.retlist[i]}")
-                    if i == 0: f.write(f"[{self.retList[i]}, ")
-                    elif not len(self.bodies)-1 == i: f.write(f"{self.retList[i]}, ") 
-                    else: f.write(f"{self.retList[i]}]")
+            try:
+                with open("Logging.txt", "r") as f1:
+                    lines = f1.readlines()
+                    for line in lines:
+                        if line[-1] != "\n":
+                            with open("Logging.txt", "a+") as f2:
+                                f2.write("\n")
+                        
+                with open("Logging.txt" ,"a+") as f:
+                    for i,thing in enumerate(self.bodies):
+                        # print(f"currently logging {self.retlist[i]}")
+                        if i == 0: f.write(f"[{self.retList[i]}, ")
+                        elif not len(self.bodies)-1 == i: f.write(f"{self.retList[i]}, ") 
+                        else: f.write(f"{self.retList[i]}]")
+            except FileNotFoundError as e:
+                with open("Logging.txt" ,"w+") as f:
+                    for i,thing in enumerate(self.bodies):
+                        # print(f"currently logging {self.retlist[i]}")
+                        if i == 0: f.write(f"[{self.retList[i]}, ")
+                        elif not len(self.bodies)-1 == i: f.write(f"{self.retList[i]}, ") 
+                        else: f.write(f"{self.retList[i]}]")
+                
     
         
     def checkProductInLogging(self):
-        with open("Logging.txt", "r") as f1:
-            lines = f1.readlines()
-        if lines == []:return False
-        else:
-            with open("Logging.txt", "r") as f:
-                lines = f.readlines()
-                
-                for line in lines:
-                    data:list = ast.literal_eval(line)
-                    prod:str = data[1]["review_product"]
-                    if prod == self.productName:return True
-                    else:continue
+        check = fixEncoding()
+        if check != "Failed":
+            try:
+                with open("Logging.txt", "r") as f1:
+                    lines = f1.readlines()
+                if lines == []:return False
+                else:
+                    with open("Logging.txt", "r") as f:
+                        lines = f.readlines()
+                        
+                        for line in lines:
+                            data:list = ast.literal_eval(line)
+                            prod:str = data[1]["review_product"]
+                            if prod == self.productName:return True
+                            else:continue
+                        return False
+            except FileNotFoundError as e:
                 return False
+        else:
+                return "Error too big"
+
+
+#LOTS OF TESTING BELOW
 
 # tempUrl = "https://www.amazon.com/Kerastase-Absolu-Overnight-Recovery-Cicanuit/dp/B08L5Q6K5T/?_encoding=UTF8&pd_rd_w=mNrTP&content-id=amzn1.sym.a725c7b8-b047-4210-9584-5391d2d91b93%3Aamzn1.symc.d10b1e54-47e4-4b2a-b42d-92fe6ebbe579&pf_rd_p=a725c7b8-b047-4210-9584-5391d2d91b93&pf_rd_r=CJKDQJPW6H3CWVHY5DE0&pd_rd_wg=az9cm&pd_rd_r=89c5e0ea-5e70-4323-a924-3f54ded0827a&ref_=pd_hp_d_atf_ci_mcx_mr_hp_atf_m"
 # temp = "https://www.amazon.com/Kerastase-Absolu-Overnight-Recovery-Cicanuit/product-reviews/B08L5Q6K5T/?_encoding=UTF8&pd_rd_w=mNrTP&content-id=amzn1.sym.a725c7b8-b047-4210-9584-5391d2d91b93%3Aamzn1.symc.d10b1e54-47e4-4b2a-b42d-92fe6ebbe579&pf_rd_p=a725c7b8-b047-4210-9584-5391d2d91b93&pf_rd_r=CJKDQJPW6H3CWVHY5DE0&pd_rd_wg=az9cm&pd_rd_r=89c5e0ea-5e70-4323-a924-3f54ded0827a&ref_=pd_hp_d_atf_ci_mcx_mr_hp_atf_m"
@@ -430,12 +448,10 @@ class AmazonSearch:
 #     print("Invalid URL")
 # else:
 #     # clearTerminal()
-#     Amazon = AmazonSearch(URL)
-#     Amazon.main()
-#     data = Amazon.retData()
-#     if not Amazon.checkProductInLogging():
-        
-#         Amazon.logData()
+# Amazon = AmazonSearch(URL)
+# Amazon.main()
+# data = Amazon.retData()
+# Amazon.logData()
 
 
 

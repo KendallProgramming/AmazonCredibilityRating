@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup
 from urllib.parse import urlparse
-import json, ast, os, sys
+import json, ast, os, sys, codecs, chardet
 
 
 def stripUrl(url:str) -> str:
@@ -118,8 +118,7 @@ def getDataFromLogging(name:str):                   #FINALLY WORKNIG AKL FJDSOIF
 #mac uses "os.system("clear")" to clear the screen, windows uses "os.system("cls")" to clear the screen. get if user is on mac or windows and decide which to use
 def clearTerminal():
     mow = str(sys.platform)
-    print(mow)
-    if "win" in mow:
+    if "win" in mow[:3]:
         mow = "windows"
     else:
         #TODO: make a check for mac as well
@@ -154,3 +153,24 @@ def getCurLine() -> int:
 #             for line in lines:
 #                 f.write(line)
             
+            
+def detectEncoding() -> str:
+    with open('Logging.txt', 'rb') as file:
+        raw_data = file.read()
+        result = chardet.detect(raw_data)
+        encoding = result['encoding']
+        return encoding
+
+
+def fixEncoding() -> None:
+    encoding = detectEncoding()
+    if str(encoding) != "utf-8":
+        try:
+            with open("Logging.txt", 'r', encoding=detectEncoding()) as ascii_file:
+                content = ascii_file.read()
+
+            # Write the content back to the same file with UTF-8 encoding
+            with open("Logging.txt", 'w', encoding='utf-8') as utf8_file:
+                utf8_file.write(content)
+        except FileNotFoundError:
+            return "Failed"
