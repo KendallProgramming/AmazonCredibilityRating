@@ -1,7 +1,5 @@
 import  requests, ast
 from bs4 import BeautifulSoup
-from urllib.parse import urlparse
-from datetime import datetime
 import re
 from BaseFunctions import getActualDate, checkProductName, stripUrl, checkUrl, clearTerminal, getCurLine, fixEncoding
 #credit: https://stackoverflow.com/questions/77549293/python-beatifulsoup-only-scrapes-the-1st-page-of-amazon-reviews-someone-knows-h
@@ -281,7 +279,6 @@ def addListStar(txt) -> str:
 #     retVal = "{}.{}".format(whole, decimal)
 #     return float(retVal)
     
-#a-price-whole
     
 
 class AmazonSearch:

@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup
 from urllib.parse import urlparse
-import json, ast, os, sys, codecs, chardet
+import json, ast, os, sys, chardet
 
 
 def stripUrl(url:str) -> str:
@@ -82,11 +82,11 @@ def getActualDate(date: str, form:str) -> str:
     return fstr
 
 
-def getReview(data:list,ind:int=0):
+def getReview(data:list,ind:int=0) -> dict:
     return data[ind]
 
 
-def stripSpecials(string:str):
+def stripSpecials(string:str) -> str:
     retString = "".join(ch for ch in string if ch.isalnum())
     return retString
             
@@ -100,7 +100,7 @@ def fixBody(string:str) -> str:
     string = string.strip('"')
     return string
 
-def getDataFromLogging(name:str):                   #FINALLY WORKNIG AKL FJDSOIFAHDSOIF UADSHFDSIFJDS FHNKDLFDASJLKF AL FDJSAKFLDAFJWOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
+def getDataFromLogging(name:str) -> dict | str: #FINALLY WORKNIG AKL FJDSOIFAHDSOIF UADSHFDSIFJDS FHNKDLFDASJLKF AL FDJSAKFLDAFJWOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
     with open("Logging.txt", "r") as f:
         lines = f.readlines()
         for line in lines:
@@ -116,7 +116,7 @@ def getDataFromLogging(name:str):                   #FINALLY WORKNIG AKL FJDSOIF
 
 #test body
 #mac uses "os.system("clear")" to clear the screen, windows uses "os.system("cls")" to clear the screen. get if user is on mac or windows and decide which to use
-def clearTerminal():
+def clearTerminal() -> None:
     mow = str(sys.platform)
     if "win" in mow[:3]:
         mow = "windows"
@@ -134,24 +134,6 @@ def clearTerminal():
 def getCurLine() -> int:
     with open("Logging.txt", "r") as f:
         return len(f.readlines())
-
-# def fixLoggingError(line:int) -> None:
-#     check = False
-#     with open("Logging.txt", "r") as f:
-#         if len(f.readlines()) != 0:
-#             check = True
-#     if check:
-#         with open("Logging.txt", "r") as f:
-#             lines = f.readlines()
-#             curLine:str = lines[line-1]
-#             curLine = curLine.replace("]", "", 1)
-            
-#         with open("Logging.txt", "r+") as f:
-#             lines = f.readlines()
-#             print(len(lines))
-#             lines[line-1] = curLine + "\n"
-#             for line in lines:
-#                 f.write(line)
             
             
 def detectEncoding() -> str:
